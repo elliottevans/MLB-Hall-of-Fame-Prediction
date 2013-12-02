@@ -35,7 +35,6 @@ For batting_all_careers.csv, the columns represent the following, in order:
 14. wRC+
 15. BsR
 16. WAR
-17. HoF classification (1 if in, 0 if not)
 
 %}
 
@@ -56,14 +55,6 @@ for i=1:numOfCareers
         end
     end
 end
-
-
-counter = counter -1;
-disp('COUNTER:');
-disp(counter);
-% Counter now represents how many players are in our training set.
-
-training_set = training_set(1:counter,1:17);
 
 
 end
