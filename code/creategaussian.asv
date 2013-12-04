@@ -18,13 +18,16 @@ sigma = cov(a);
 
 %Calculate the means
 mu = zeros(1, numOfStats);
+sig = zeros(1, numOfStats);
 
 for i = 1:numOfStats
     mu(1,i) = mean(a(:,i));
+    sig(1,i) = std(a(:,i));
 end
-
+   
 gaussian = gmdistribution(mu, sigma);
 
-
-
+if numOfStats == 2
+    
+    
 end
