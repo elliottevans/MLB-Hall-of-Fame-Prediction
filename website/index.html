@@ -32,22 +32,48 @@
       
       <div id="overview">
         <h2>Overview</h2>
-        <p>We have chosen to build a system that, given the lifetime
+        <p>Come election time for the Major League Baseball Hall of Fame, various players,
+           commentators, and writers, attempt to predict who will and will not gain
+           entry. We have chosen to build a system that, given the lifetime
            statistics of a Major League Baseball position player, predicts whether
            or not that position player will be inducted into the Hall of Fame. We construct
            two Gaussian models: one that is representative of Hall of Famers and another
-           that is representative of players not in the Hall of Fame. 
+           that is representative of players not in the Hall of Fame. We studied 15 offensive
+           statistics in particular: G, PA, HR, R, RBI, SB, ISO, BABIP, AVG, OBP, SLG, wOBA,
+           wRC+, BsR, and WAR. 
         </p>
       </div>
 
       <div id="methodology">
         <h2>Methodology</h2>
-        <p>This is our methodology text.</p>
+        <p>We utilized multi-dimensional Gaussians to model our Hall of Fame class and our 
+           non-Hall of Fame class, which we will call the "Scrub" class. We trained our system
+           on data from the years 1974-1984 (this is intuitive since you need at least 10
+           years of retirement to be eligible for the HOF). Once we created our training set,
+           we performed 3-fold cross validation and proceeded to divide up the training sets
+           into Hall-of-Famers and Scrubs, from which we based our Gaussian models. Using both
+           models, if we find that the probability of a player belonging to the HOF class is 
+           greater than the probability of him belonging to the Scrub class then he is classified
+           as a Hall-of-Famer, otherwise he is a Scrub. Thus, the error measure for our model is 
+           the number of missclassifications on the validation sets. The baseline approach against
+           which we will compare our system is the assumption that the probability of a player 
+           making the Hall of Fame is .062 (or the proportion of Hall-of-Famers in our training
+           set). The baseline will then proceed to classify every player as a Scrub and will have
+           an error rate of .062.
+        </p>
+        
       </div>
 
       <div id="results">
         <h2>Results</h2>
-        <p>This is our results text.</p>
+        <p>Thusfar, we have determined that our system is about as accurate as using the
+           baseline approach if we use advanced metrics and worse if we use typical metrics. 
+           For instance, when we create our Gaussian models using HR and RBI,
+           we obtain an average error rate of .137. When using the advanced metrics of wOBA, wRC+, and WAR,
+           we obtain an average error rate of approximately .066, very similar to the baseline error
+           rate of .062. Interestingly enough, the "triple crown" statistics performed very poorly
+           with an error rate of .127
+   </p>
       </div>
     </div>
 
