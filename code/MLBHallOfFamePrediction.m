@@ -1,4 +1,4 @@
-function [] = MLBHallOfFamePrediction(data,numFolds)
+function [allErrors] = MLBHallOfFamePrediction(data,numFolds)
 % MLBHallOfFamePrediction
 %
 % describe that stuff
@@ -23,7 +23,9 @@ function [] = MLBHallOfFamePrediction(data,numFolds)
         validationSets(i,:)=samples((i*validationSetSize-(validationSetSize-1)):(i*validationSetSize));
     end
     
-    numTrainingSetRows=numFolds-1;
+    trainingSetSize=(numFolds-1)*validationSetSize;
+    modelErrors=zeros(1,numFolds);
+    baselineErrors=zeros(1,numFolds);
     for i=1:numFolds
         % i corresponds to the current row of validationSets that we will
         % test on. Players in this row are the testingSet
@@ -37,15 +39,39 @@ function [] = MLBHallOfFamePrediction(data,numFolds)
             currentRow=currentRow+1;
         end
         
-        trainingSet=zeros(trainingSetSize*validationSetSize,numAttributes);
+        trainingSet=zeros(trainingSetSize,numAttributes);
+        currentRow=1;
         for j=1:numFolds
             if (j ~= i)
                 % then this row is part of the training set
                 trainingSetRows=validationSets(j,:);
                 for player=trainingSetRows
-                     
-                
+                    trainingSet(currentRow,:)=data(player,:);
+                    currentRow=currentRow+1;
+                end
+            end
+        end
+        [HoF, nonHoF] = divideset(trainingSet);
+        gaussianHoF = creategaussian(HoF);
+        gaussianNonHoF = creategaussian(nonHoF);
+        
+        numMisclassifications=0;
+        for player=1:validationSetSize
+            playerStats=testingSet(player,2:end-1);
+            zHoF=pdf(gaussianHoF,playerStats);
+            zNonHoF=pdf(gaussianNonHoF,playerStats);
+            if (zHoF > zNonHoF)
+                classification = 1;
+            else
+                classification = 0;
+            end
             
+            if (testingSet(player,end)~=classification)
+                numMisclassifications=numMisclassifications+1;
+            end
+        end
+        error=numMisclassifications/validationSetSize;
+        modelErrors(i)=error;
     end
 
 end
