@@ -1,4 +1,4 @@
-function [allErrors] = MLBHallOfFamePrediction(data,numFolds,statArray)
+function [modelErrors,baselineErrors] = MLBHallOfFamePrediction(data,numFolds,statArray)
 % MLBHallOfFamePrediction
 %
 % describe that stuff
@@ -52,16 +52,19 @@ function [allErrors] = MLBHallOfFamePrediction(data,numFolds,statArray)
             end
         end
         [HoF, nonHoF] = divideset(trainingSet);
-        gaussianHoF = creategaussian(HoF);
-        gaussianNonHoF = creategaussian(nonHoF);
+        gaussianHoF = creategaussian(HoF,statArray);
+        gaussianNonHoF = creategaussian(nonHoF,statArray);
         
+        % classify as HoF or not
         numMisclassifications=0;
+        numBaselineMisclassifications=0;
         for player=1:validationSetSize
             playerStats=testingSet(player,statArray);
             zHoF=pdf(gaussianHoF,playerStats);
             zNonHoF=pdf(gaussianNonHoF,playerStats);
             if (zHoF > zNonHoF)
                 classification = 1;
+                numBaselineMisclassifications=numBaselineMisclassifications+1;
             else
                 classification = 0;
             end
@@ -70,8 +73,10 @@ function [allErrors] = MLBHallOfFamePrediction(data,numFolds,statArray)
                 numMisclassifications=numMisclassifications+1;
             end
         end
-        error=numMisclassifications/validationSetSize;
-        modelErrors(i)=error;
+        modelError=numMisclassifications/validationSetSize;
+        baselineError=numBaselineMisclassifications/validationSetSize;
+        modelErrors(i)=modelError;
+        baselineErrors(i)=baselineError;
     end
 
 end
