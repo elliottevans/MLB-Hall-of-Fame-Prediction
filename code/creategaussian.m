@@ -1,20 +1,25 @@
-function gaussian = creategaussian(class_set)
+function gaussian = creategaussian(class_set, stat_array)
 
-[numOfPlayers, numOfStats] = size(class_set);
+%stat_array is 1xn
+%Don't use 1 or 17 in the stat array...plz.
 
+[numOfPlayers, x] = size(class_set);
 
-a = zeros(numOfPlayers, numOfStats-2);
+numOfStats = length(stat_array(1,:));
+
+a = zeros(numOfPlayers, numOfStats);
 % Get specific stats here
 
-%First column is wRC+
-a(:,1:numOfStats-2) = class_set(:,2:numOfStats-1);
+for i = 1:numOfStats
+    a(:,i) = class_set(:,stat_array(i));
+end
 
 sigma = cov(a);
 
 %Calculate the means
-mu = zeros(1, numOfStats-2);
+mu = zeros(1, numOfStats);
 
-for i = 1:15
+for i = 1:numOfStats
     mu(1,i) = mean(a(:,i));
 end
 
