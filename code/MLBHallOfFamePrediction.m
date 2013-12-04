@@ -64,13 +64,15 @@ function [modelErrors,baselineErrors] = MLBHallOfFamePrediction(data,numFolds,st
             zNonHoF=pdf(gaussianNonHoF,playerStats);
             if (zHoF > zNonHoF)
                 classification = 1;
-                numBaselineMisclassifications=numBaselineMisclassifications+1;
             else
                 classification = 0;
             end
             
-            if (testingSet(player,end)~=classification)
+            actualClassification=testingSet(player,end);
+            if (actualClassification~=classification)
                 numMisclassifications=numMisclassifications+1;
+            elseif (actualClassification==0)
+                numBaselineMisclassifications=numBaselineMisclassifications+1;
             end
         end
         modelError=numMisclassifications/validationSetSize;
