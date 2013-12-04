@@ -1,23 +1,37 @@
-function gaussian = creategaussian(class_set)
+function gaussian = creategaussian(training_set)
 
-[numOfPlayers, numOfStats] = size(class_set);
+[numOfPlayers, numOfStats] = size(training_set);
 
-
+disp(numOfStats);
 a = zeros(numOfPlayers, numOfStats-2);
 % Get specific stats here
 
 %First column is wRC+
-a(:,1:numOfStats-2) = class_set(:,2:numOfStats-1);
+a(:,1:numOfStats-2) = training_set(:,2:16);
 
 sigma = cov(a);
+disp(sigma);
 
 %Calculate the means
-mu = zeros(1, numOfStats-2);
+mu = zeros(1, 15);
 
 for i = 1:15
     mu(1,i) = mean(a(:,i));
 end
 
 gaussian = gmdistribution(mu, sigma);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 end

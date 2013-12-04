@@ -39,11 +39,15 @@ For batting_all_careers.csv, the columns represent the following, in order:
 
 %}
 
+all_careers = csvread(all_careers);
+time_players = csvread(time_players);
 
 [numOfCareers, numOfStats] = size(all_careers);
 
 training_set = zeros(numOfCareers, numOfStats+1);
 counter = 1;
+
+
 
 for i=1:numOfCareers
     player_id = all_careers(i,1);
