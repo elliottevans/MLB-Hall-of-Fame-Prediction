@@ -1,4 +1,4 @@
-function [allErrors] = MLBHallOfFamePrediction(data,numFolds)
+function [allErrors] = MLBHallOfFamePrediction(data,numFolds,)
 % MLBHallOfFamePrediction
 %
 % describe that stuff
@@ -71,7 +71,7 @@ function [allErrors] = MLBHallOfFamePrediction(data,numFolds)
             end
         end
         error=numMisclassifications/validationSetSize;
-        allErrors(i)=error;
+        modelErrors(i)=error;
     end
 
 end
