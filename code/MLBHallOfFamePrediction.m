@@ -1,4 +1,4 @@
-function [modelErrors,baselineErrors] = MLBHallOfFamePrediction(data,numFolds,statArray)
+function [modelErrors] = MLBHallOfFamePrediction(data,numFolds,statArray)
 % MLBHallOfFamePrediction
 %
 % describe that stuff
