@@ -1,4 +1,4 @@
-function [modelErrors,baselineErrors] = MLBHallOfFamePrediction(data,numFolds,statArray)
+function [modelErrors] = MLBHallOfFamePrediction(data,numFolds,statArray)
 % MLBHallOfFamePrediction
 %
 % describe that stuff
@@ -23,7 +23,7 @@ function [modelErrors,baselineErrors] = MLBHallOfFamePrediction(data,numFolds,st
 %
 % AUTHORS: Elliott Evans, Jon Ford, Corey McMahon
 
-    % body
+    % body   
     % num is number of instances
     [numPlayers,numAttributes] = size(data);
 
@@ -70,8 +70,8 @@ function [modelErrors,baselineErrors] = MLBHallOfFamePrediction(data,numFolds,st
             end
         end
         [HoF, nonHoF] = divideset(trainingSet);
-        gaussianHoF = creategaussian(HoF,statArray);
-        gaussianNonHoF = creategaussian(nonHoF,statArray);
+        gaussianHoF = creategaussian(HoF,statArray);          
+        gaussianNonHoF = creategaussian(nonHoF,statArray);      
         
         % classify as HoF or not
         numMisclassifications=0;
@@ -91,6 +91,19 @@ function [modelErrors,baselineErrors] = MLBHallOfFamePrediction(data,numFolds,st
                 numMisclassifications=numMisclassifications+1;
             elseif (actualClassification==1)
                 numBaselineMisclassifications=numBaselineMisclassifications+1;
+            end
+            
+            if(testingSet(player,end)==1 && classification==1)
+                disp('CORRECTLY GOT A HOFer');
+            end
+            if(testingSet(player,end)==0 && classification==0)
+                disp('CORRECTLY GOT A SCRUB');
+            end
+            if(testingSet(player,end)==1 && classification==0)
+                disp('ACCIDENTALLY CALLED A HALL OF FAMER A SCRUB*********');
+            end
+            if(testingSet(player,end)==0 && classification==1)
+                disp('ACCIDENTALLY CALLED A SCRUB A HALL OF FAMER*********');
             end
         end
         modelError=numMisclassifications/validationSetSize;
