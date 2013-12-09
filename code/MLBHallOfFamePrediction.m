@@ -2,6 +2,24 @@ function [modelErrors,baselineErrors] = MLBHallOfFamePrediction(data,numFolds,st
 % MLBHallOfFamePrediction
 %
 % describe that stuff
+% For batting_all_careers.csv, the columns represent the following, in order:
+% 1. playerid
+% 2. G
+% 3. PA
+% 4. HR
+% 5. R
+% 6. RBI
+% 7. SB
+% 8. ISO
+% 9. BABIP
+% 10. AVG
+% 11. OBP
+% 12. SLG
+% 13. wOBA
+% 14. wRC+
+% 15. BsR
+% 16. WAR
+% 17. HoF classification (1 if in, 0 if not)
 %
 % AUTHORS: Elliott Evans, Jon Ford, Corey McMahon
 
@@ -71,7 +89,7 @@ function [modelErrors,baselineErrors] = MLBHallOfFamePrediction(data,numFolds,st
             actualClassification=testingSet(player,end);
             if (actualClassification~=classification)
                 numMisclassifications=numMisclassifications+1;
-            elseif (actualClassification==0)
+            elseif (actualClassification==1)
                 numBaselineMisclassifications=numBaselineMisclassifications+1;
             end
         end
