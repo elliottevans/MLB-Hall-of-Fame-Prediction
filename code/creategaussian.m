@@ -47,16 +47,19 @@ end
 gaussian = gmdistribution(mu, sigma);
 
 if numOfStats == 2
+    figure;
     ezsurf(@(x,y)pdf(gaussian, [x y]), [mu(1,1)-3*sig(1,1) mu(1,1) + 3*sig(1,1)], [mu(1,2)-3*sig(1,2) mu(1,2) + 3*sig(1,2)]);
+    
     xlabel(strings{stat_array(1,1)});
-    ylabel(strings{stat_array(1,2)});
+    ylabel(strings{stat_array(1,2)});    
     if(class_set(1, 17) == 1)
         %We have a HOF set since we'll be running this with
         %sets of either all HOFs or all scrubs.
         title('Hall of Fame Gaussian Model');
     else
         title('Scrub Gaussian Model');
-    end
+    end    
 end
+
 end
     

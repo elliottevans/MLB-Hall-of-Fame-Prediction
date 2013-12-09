@@ -5,7 +5,7 @@ function [modelErrors] = MLBHallOfFamePrediction(data,numFolds,statArray)
 %
 % AUTHORS: Elliott Evans, Jon Ford, Corey McMahon
 
-    % body
+    % body   
     % num is number of instances
     [numPlayers,numAttributes] = size(data);
 
@@ -52,8 +52,8 @@ function [modelErrors] = MLBHallOfFamePrediction(data,numFolds,statArray)
             end
         end
         [HoF, nonHoF] = divideset(trainingSet);
-        gaussianHoF = creategaussian(HoF,statArray);
-        gaussianNonHoF = creategaussian(nonHoF,statArray);
+        gaussianHoF = creategaussian(HoF,statArray);          
+        gaussianNonHoF = creategaussian(nonHoF,statArray);      
         
         % classify as HoF or not
         numMisclassifications=0;
