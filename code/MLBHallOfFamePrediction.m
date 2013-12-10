@@ -83,7 +83,7 @@ function [modelErrors] = MLBHallOfFamePrediction(data,numFolds,statArray)
                 end
             end
         end
-        w = findOptW2(trainingSet, 1, statArray, .0001, .001, .0001);
+        w = findOptW2(trainingSet, 1, statArray, 0, .000001, 0);
         
         [HoF, nonHoF] = divideset(trainingSet);
         gaussianHoF = creategaussian(HoF,statArray);          
