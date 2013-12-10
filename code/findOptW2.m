@@ -48,10 +48,7 @@ function [w] = findOptW2(data,numFolds,statArray,wInit,intervalInit,threshold)
     
     if (numFolds==1)
         % initialize values
-        w = wInit;
-        modelErrorPrev=1;
-        gradient=1;
-        interval=intervalInit;
+        minModelError=1;
         
         % if numFolds is 1 then the user does not want to use cross
         % validation
@@ -60,10 +57,9 @@ function [w] = findOptW2(data,numFolds,statArray,wInit,intervalInit,threshold)
         gaussianNonHoF = creategaussian(nonHoF,statArray);
         
         % perform gradient descent
-        while (gradient > threshold)
+        for w=0:intervalInit:.0001
             % get the errors of the models by moving in each direction
-            numMisclassificationsPos=0;
-            numMisclassificationsNeg=0;
+            numMisclassifications=0;
             
             % classify all players for both decresing the weights
             % and increasing the weights
@@ -71,47 +67,30 @@ function [w] = findOptW2(data,numFolds,statArray,wInit,intervalInit,threshold)
                 playerStats=data(player,statArray);
                 zHoF=pdf(gaussianHoF,playerStats);
                 zNonHoF=pdf(gaussianNonHoF,playerStats);
+                %fprintf('zHoF: %f\tZnonHof: %f\n',zHoF,zNonHoF);
                 
-                if (zHoF > zNonHoF+w+intervalInit)
-                    classificationPos = 1;
+                if (zHoF > zNonHoF+w)
+                    classificationPos = 1; % classify as HoF
                 else
                     classificationPos = 0;
-                end
-                if (zHoF > zNonHoF+w-intervalInit)
-                    classificationNeg = 1;
-                else
-                    classificationNeg = 0;
                 end
 
                 actualClassification=data(player,end);
                 if (actualClassification~=classificationPos)
-                    numMisclassificationsPos=numMisclassificationsPos+1;
-                elseif (actualClassification~=classificationNeg)
-                    numMisclassificationsNeg=numMisclassificationsNeg+1;  
+                    numMisclassifications=numMisclassifications+1;
                 end                
             end
             
-            modelErrorPos=numMisclassificationsPos/numPlayers;
-            modelErrorNeg=numMisclassificationsNeg/numPlayers;
+            modelError=numMisclassifications/numPlayers;
 
-            % find the gradients
-            gradientPos=(modelErrorPrev-modelErrorPos)/interval;
-            gradientNeg=(modelErrorPrev-modelErrorNeg)/interval;
-
-            % adjust w appropriately
-            % we want the largest gradient
-            if (gradientPos>gradientNeg)
-                w=w+intervalInit;
-                modelErrorPrev=modelErrorPos;
-                gradient=gradientPos;
-                interval=interval*gradientPos;
-            else
-                w=w-intervalInit;
-                modelErrorPrev=modelErrorNeg;
-                gradient=gradientNeg;
-                interval=interval*gradientNeg;
+            % if this error is less than min, update the best weight
+            if (modelError<minModelError)
+                minModelError=modelError;
+                wMin=w;
             end
         end
+        w=wMin;
+        
     else
         % the user does want to use cross validation    
 
