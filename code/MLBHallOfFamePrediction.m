@@ -122,6 +122,7 @@ function [modelErrors] = MLBHallOfFamePrediction(data,numFolds,statArray,w)
 %                 disp('ACCIDENTALLY CALLED A SCRUB A HALL OF FAMER*********');
                 errorSkew = errorSkew-1;
             end
+
         end
         disp('ERROR SKEW:');
         disp(errorSkew);
