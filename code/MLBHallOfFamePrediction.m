@@ -1,7 +1,8 @@
-function [modelErrors] = MLBHallOfFamePrediction(data,numFolds,statArray)
+function [modelErrors] = MLBHallOfFamePrediction(data,numFolds,statArray,w)
 % MLBHallOfFamePrediction
 %
-% describe that stuff
+% data is a matrix where rows are players
+% and there are 17 columns described below
 % For batting_all_careers.csv, the columns represent the following, in order:
 % 1. playerid
 % 2. G
@@ -20,6 +21,18 @@ function [modelErrors] = MLBHallOfFamePrediction(data,numFolds,statArray)
 % 15. BsR
 % 16. WAR
 % 17. HoF classification (1 if in, 0 if not)
+%
+% numFolds is the number of folds to use in cross validation
+%
+% statArray is an array containing any numbers 1,..,17 corresponding to the
+% columns of data that will be used to create the gaussian. For example, if
+% statArray=[4,5,6] then HR, R, and RBI will be the statistics used to the
+% create the gaussian model
+%
+% w is the weight adjuster used when comparing the probability densities of
+% the gaussian created for Hall of Famers vs Non Hall of Famers. The
+% specific equation used is:
+% if (pdf(HoF)>pdf(nonHoF)+w) then classify example as Hall of Famer
 %
 % AUTHORS: Elliott Evans, Jon Ford, Corey McMahon
 
@@ -44,6 +57,7 @@ function [modelErrors] = MLBHallOfFamePrediction(data,numFolds,statArray)
     trainingSetSize=(numFolds-1)*validationSetSize;
     modelErrors=zeros(1,numFolds);
     baselineErrors=zeros(1,numFolds);
+    
     for i=1:numFolds
         % i corresponds to the current row of validationSets that we will
         % test on. Players in this row are the testingSet
@@ -80,7 +94,7 @@ function [modelErrors] = MLBHallOfFamePrediction(data,numFolds,statArray)
             playerStats=testingSet(player,statArray);
             zHoF=pdf(gaussianHoF,playerStats);
             zNonHoF=pdf(gaussianNonHoF,playerStats);
-            if (zHoF > zNonHoF)
+            if (zHoF > zNonHoF+w)
                 classification = 1;
             else
                 classification = 0;
@@ -93,18 +107,18 @@ function [modelErrors] = MLBHallOfFamePrediction(data,numFolds,statArray)
                 numBaselineMisclassifications=numBaselineMisclassifications+1;
             end
             
-            if(testingSet(player,end)==1 && classification==1)
-                disp('CORRECTLY GOT A HOFer');
-            end
-            if(testingSet(player,end)==0 && classification==0)
-                disp('CORRECTLY GOT A SCRUB');
-            end
-            if(testingSet(player,end)==1 && classification==0)
-                disp('ACCIDENTALLY CALLED A HALL OF FAMER A SCRUB*********');
-            end
-            if(testingSet(player,end)==0 && classification==1)
-                disp('ACCIDENTALLY CALLED A SCRUB A HALL OF FAMER*********');
-            end
+%            if(actualClassification==1 && classification==1)
+%                disp('CORRECTLY GOT A HOFer');
+%            end
+%            if(actualClassification==0 && classification==0)
+%                disp('CORRECTLY GOT A SCRUB');
+%            end
+%            if(actualClassification==1 && classification==0)
+%                disp('ACCIDENTALLY CALLED A HALL OF FAMER A SCRUB*********');
+%            end
+%            if(actualClassification==0 && classification==1)
+%                disp('ACCIDENTALLY CALLED A SCRUB A HALL OF FAMER*********');
+%            end
         end
         modelError=numMisclassifications/validationSetSize;
         baselineError=numBaselineMisclassifications/validationSetSize;
