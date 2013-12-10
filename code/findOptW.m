@@ -60,8 +60,10 @@ while (gradient > threshold)
     if (gradientPos>gradientNeg)
         w=w+interval;
         avgErrorPrev=avgErrorPos;
+        gradient = gradientPos;
     else
         w=w-interval;
         avgErrorPrev=avgErrorNeg;
+        gradient = gradientNeg;
     end
 end
