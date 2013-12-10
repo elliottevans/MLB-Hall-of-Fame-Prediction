@@ -1,4 +1,4 @@
-function [modelErrors] = MLBHallOfFamePrediction(data,numFolds,statArray,w)
+function [modelErrors] = MLBHallOfFamePrediction(data,numFolds,statArray)
 % MLBHallOfFamePrediction
 %
 % data is a matrix where rows are players
@@ -83,10 +83,13 @@ function [modelErrors] = MLBHallOfFamePrediction(data,numFolds,statArray,w)
                 end
             end
         end
+        w = findOptW2(trainingSet, 1, statArray, .0001, .001, .0001);
+        
         [HoF, nonHoF] = divideset(trainingSet);
         gaussianHoF = creategaussian(HoF,statArray);          
         gaussianNonHoF = creategaussian(nonHoF,statArray);      
         errorSkew = 0;
+        totalErrors = 0;
         % classify as HoF or not
         numMisclassifications=0;
         numBaselineMisclassifications=0;
@@ -118,15 +121,20 @@ function [modelErrors] = MLBHallOfFamePrediction(data,numFolds,statArray,w)
             if(actualClassification==1 && classification==0)
 %                 disp('ACCIDENTALLY CALLED A HALL OF FAMER A SCRUB*********');
                 errorSkew = errorSkew+1;
+                totalErrors = totalErrors + 1;
             end
             if(actualClassification==0 && classification==1)
 %                 disp('ACCIDENTALLY CALLED A SCRUB A HALL OF FAMER*********');
                 errorSkew = errorSkew-1;
+                totalErrors = totalErrors + 1;
             end
 
         end
         disp('ERROR SKEW:');
         disp(errorSkew);
+        disp('out of');
+        disp(totalErrors);
+        
         modelError=numMisclassifications/validationSetSize;
         baselineError=numBaselineMisclassifications/validationSetSize;
         modelErrors(i)=modelError;
