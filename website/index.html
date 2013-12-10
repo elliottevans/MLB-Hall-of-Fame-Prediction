@@ -42,7 +42,9 @@
           <h1>MLB Hall of Fame Predictor</h1>
         </div>
         <div class="span4">
-          <h4 style="text-align: right;">Northwestern University, EECS 439<br>Instructor Bryan Pardo</h4>
+          <h4 style="text-align: right;">
+            <a href="http://www.cs.northwestern.edu/~pardo/courses/eecs349/">Northwestern University, EECS 349</a><br>Instructor Bryan Pardo
+          </h4>
         </div>
         
         
@@ -70,7 +72,7 @@
           <h2>Overview</h2>
           <p>Come election time for the Major League Baseball Hall of Fame, various players,
              commentators and writers, attempt to predict who will and will not gain
-             entry. The desire for knowledge about whether or not a player will be inducted comes from multiple angles. Fans want to know if their favorite players are going to make the Hall or not. Writers often write articles predicting the voting outcomes and are judged more favorably if they are consistently accurate. Teams themselves have financial stake in the matter; if a former superstar is inducted, special Hall of Fame jerseys can be sold.
+             entry. The desire for knowledge about whether or not a player will be inducted comes from multiple angles. Fans want to know if their favorite players are going to make the Hall or not. Writers often write articles predicting the voting outcomes and are judged more favorably if they are consistently accurate. Teams themselves have financial stake in the matter; if a former superstar is inducted, special Hall of Fame jerseys can be sold. <strong>For each of these groups of people, a system that could accurately predict whether or not a given player will make the hall of fame would be extremely useful.</strong>
           </p>
 
           <p>
@@ -92,7 +94,7 @@
 
           <center>
             <img src="data_sample.png">
-            <p style="font-size:12px;">Sample sata from our data set, provided by <a href="http://www.fangraphs.com">Fangraphs</a>.</p>
+            <p style="font-size:12px;">Sample data from our data set, provided by <a href="http://www.fangraphs.com">Fangraphs</a>.</p>
           </center>
         </div>
       </div>
@@ -113,15 +115,45 @@
 
         </div>
         <div class="span6">
-          <img src="example_gaussian_hof.jpg">
+          <img src="example_gaussian_hof2.jpg">
         </div>
       </div>
 
       <div class="row" id="results" style="padding-bottom:20px">
-        <div class="span8">
+        <div class="span12">
           <h2>Results</h2>
+        </div>
+        <div class="span6">
+          
+          <!--
           <p><strong>Thus far, we have determined that our system is about as accurate as using the baseline approach if we use advanced metrics</strong> and worse if we use typical metrics. For instance, when we create our Gaussian models using HR and RBI, we obtain an average error rate of .137. When using the advanced metrics of wOBA, wRC+, and WAR, we obtain an average error rate of approximately .066, very similar to the baseline error rate of .062. Interestingly enough, the "triple crown" of AVG, HR and RBI performed very poorly with an error rate of .127.
           </p>
+        -->
+          <p><strong>The performance of our Hall of Fame predictor varies greatly depending on which statistics are used.</strong> When used in isolation, the performance of the statistics varies from an error rate of .269 when using BABIP to an error rate of .094 when using WAR. This is relatively intuitive, as BABIP is not reflective of overall performance, while the entire purpose of the WAR statistic is to encompass overall performance. Overall, no individual statistic performed as well as the baseline approach.</p>
+        </div>
+        <div class="span12">
+          <center>
+            <img src="individual_error_rates.jpg">
+          </center>
+        </div>
+        <div class="span8">
+          <p><strong>Better performance can be achieved through the use of multiple statistics.</strong> The question then becomes which combinations of statistics yields the best results. The best possible combination would be statistics that perform well on their own and are relatively uncorrelated - that is, they tell us different things about a player's ability and therfore probability of being inducted into the Hall of Fame. The above graph shows isolated performance of the individual statistics. The graph below shows us the correlation of the various statistics.
+        </div>
+        <div class="span12">
+          <center>
+            <h4>Correlation matrix for various baseball statistics</h4>
+            <img src="correlation_matrix.png">
+          </center>
+        </div>
+        <div class="span4">
+          <p>Using this information, <strong>we determined that the model with the best possible predictive power would use the statistics WAR and BsR.</strong> This outperforms many other combinations of statistics that we tested together due to their historical importance or because of their favor among baseball statisticians.</p>
+        </div>
+        <div class="span8">
+          <p><strong>ERROR RATES OF STAT COMBOS HERE</strong></p>
+        </div>
+
+
+
         </div>
       </div>
     </div>
