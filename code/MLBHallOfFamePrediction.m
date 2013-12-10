@@ -107,6 +107,7 @@ function [modelErrors] = MLBHallOfFamePrediction(data,numFolds,statArray,w)
                 numBaselineMisclassifications=numBaselineMisclassifications+1;
             end
             
+
             
 %             if(actualClassification==1 && classification==1)
 %                 disp('CORRECTLY GOT A HOFer');
