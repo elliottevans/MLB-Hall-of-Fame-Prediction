@@ -101,11 +101,11 @@ function [w] = findOptW2(data,numFolds,statArray,wInit,interval,threshold)
             % we want the largest gradient
             if (gradientPos>gradientNeg)
                 w=w+interval;
-                modelErrorPrev=avgErrorPos;
+                modelErrorPrev=modelErrorPos;
                 gradient=gradientPos;
             else
                 w=w-interval;
-                modelErrorPrev=avgErrorNeg;
+                modelErrorPrev=modelErrorNeg;
                 gradient=gradientNeg;
             end
         end
