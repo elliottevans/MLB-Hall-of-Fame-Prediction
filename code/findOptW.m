@@ -44,7 +44,7 @@ w = wInit;
 initialErrors=MLBHallOfFamePrediction(data,numFolds,statArray,w);
 avgErrorPrev=mean(initialErrors);
 gradient=1;
-while (gradient > .001)
+while (gradient > threshold)
     % get the errors of the models by moving in each direction
     errorsNeg=MLBHallOfFamePrediction(data,numFolds,statArray,w-interval);
     avgErrorNeg=mean(errorsNeg);
