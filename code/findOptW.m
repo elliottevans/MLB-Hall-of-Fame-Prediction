@@ -39,6 +39,8 @@ function [w] = findOptW(data,numFolds,statArray,wInit,interval,threshold)
 %
 % threshold defines the stopping point of the algorithm, the function
 % returns w when gradient is less than this threshold
+%
+% AUTHORS: Elliott Evans, Jon Ford, Corey McMahon
 
 w = wInit;
 initialErrors=MLBHallOfFamePrediction(data,numFolds,statArray,w);
