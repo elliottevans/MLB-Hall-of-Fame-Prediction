@@ -107,18 +107,18 @@ function [modelErrors] = MLBHallOfFamePrediction(data,numFolds,statArray,w)
                 numBaselineMisclassifications=numBaselineMisclassifications+1;
             end
             
-%            if(actualClassification==1 && classification==1)
-%                disp('CORRECTLY GOT A HOFer');
-%            end
-%            if(actualClassification==0 && classification==0)
-%                disp('CORRECTLY GOT A SCRUB');
-%            end
-%            if(actualClassification==1 && classification==0)
-%                disp('ACCIDENTALLY CALLED A HALL OF FAMER A SCRUB*********');
-%            end
-%            if(actualClassification==0 && classification==1)
-%                disp('ACCIDENTALLY CALLED A SCRUB A HALL OF FAMER*********');
-%            end
+             if(actualClassification==1 && classification==1)
+                 %disp('CORRECTLY GOT A HOFer');
+             end
+             if(actualClassification==0 && classification==0)
+                 %disp('CORRECTLY GOT A SCRUB');
+             end
+             if(actualClassification==1 && classification==0)
+                 %disp('ACCIDENTALLY CALLED A HALL OF FAMER A SCRUB*********');
+             end
+             if(actualClassification==0 && classification==1)
+                 %disp('ACCIDENTALLY CALLED A SCRUB A HALL OF FAMER*********');
+             end
         end
         modelError=numMisclassifications/validationSetSize;
         baselineError=numBaselineMisclassifications/validationSetSize;
