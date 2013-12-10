@@ -1,4 +1,4 @@
-function [w] = findOptW2(data,numFolds,statArray,wInit,interval,threshold)
+function [w] = findOptW2(data,numFolds,statArray,wInit,intervalInit,threshold)
 % findOptW finds the optimum weight to use in our gaussian classifier by
 % using gradient descent.
 %
@@ -51,6 +51,7 @@ function [w] = findOptW2(data,numFolds,statArray,wInit,interval,threshold)
         w = wInit;
         modelErrorPrev=1;
         gradient=1;
+        interval=intervalInit;
         
         % if numFolds is 1 then the user does not want to use cross
         % validation
@@ -71,12 +72,12 @@ function [w] = findOptW2(data,numFolds,statArray,wInit,interval,threshold)
                 zHoF=pdf(gaussianHoF,playerStats);
                 zNonHoF=pdf(gaussianNonHoF,playerStats);
                 
-                if (zHoF > zNonHoF+w+interval)
+                if (zHoF > zNonHoF+w+intervalInit)
                     classificationPos = 1;
                 else
                     classificationPos = 0;
                 end
-                if (zHoF > zNonHoF+w-interval)
+                if (zHoF > zNonHoF+w-intervalInit)
                     classificationNeg = 1;
                 else
                     classificationNeg = 0;
@@ -94,19 +95,21 @@ function [w] = findOptW2(data,numFolds,statArray,wInit,interval,threshold)
             modelErrorNeg=numMisclassificationsNeg/numPlayers;
 
             % find the gradients
-            gradientPos=modelErrorPrev-modelErrorPos;
-            gradientNeg=modelErrorPrev-modelErrorNeg;
+            gradientPos=(modelErrorPrev-modelErrorPos)/interval;
+            gradientNeg=(modelErrorPrev-modelErrorNeg)/interval;
 
             % adjust w appropriately
             % we want the largest gradient
             if (gradientPos>gradientNeg)
-                w=w+interval;
+                w=w+intervalInit;
                 modelErrorPrev=modelErrorPos;
                 gradient=gradientPos;
+                interval=interval*gradientPos;
             else
-                w=w-interval;
+                w=w-intervalInit;
                 modelErrorPrev=modelErrorNeg;
                 gradient=gradientNeg;
+                interval=interval*gradientNeg;
             end
         end
     else
@@ -127,11 +130,7 @@ function [w] = findOptW2(data,numFolds,statArray,wInit,interval,threshold)
         end
 
         trainingSetSize=(numFolds-1)*validationSetSize;
-        modelErrors=zeros(1,numFolds);
-        % initialize values
-        w = wInit;
-        modelErrorPrev=1;
-        gradient=1;
+        modelWs=zeros(1,numFolds);        
 
         for i=1:numFolds
             % i corresponds to the current row of validationSets that we will
@@ -162,7 +161,12 @@ function [w] = findOptW2(data,numFolds,statArray,wInit,interval,threshold)
             % create the gaussians
             [HoF, nonHoF] = divideset(trainingSet);
             gaussianHoF = creategaussian(HoF,statArray);          
-            gaussianNonHoF = creategaussian(nonHoF,statArray);      
+            gaussianNonHoF = creategaussian(nonHoF,statArray);  
+            
+            % initialize values
+            w = wInit;
+            modelErrorPrev=1;
+            gradient=1;
 
             while (gradient > threshold)
                 % get the errors of the models by moving in each direction
@@ -171,17 +175,17 @@ function [w] = findOptW2(data,numFolds,statArray,wInit,interval,threshold)
 
                 % classify all players for both decresing the weights
                 % and increasing the weights
-                for player=1:numPlayers
-                    playerStats=data(player,statArray);
+                for player=1:validationSetSize
+                    playerStats=testingSet(player,statArray);
                     zHoF=pdf(gaussianHoF,playerStats);
                     zNonHoF=pdf(gaussianNonHoF,playerStats);
 
-                    if (zHoF > zNonHoF+w+interval)
+                    if (zHoF > zNonHoF+w+intervalInit)
                         classificationPos = 1;
                     else
                         classificationPos = 0;
                     end
-                    if (zHoF > zNonHoF+w-interval)
+                    if (zHoF > zNonHoF+w-intervalInit)
                         classificationNeg = 1;
                     else
                         classificationNeg = 0;
@@ -205,15 +209,20 @@ function [w] = findOptW2(data,numFolds,statArray,wInit,interval,threshold)
                 % adjust w appropriately
                 % we want the largest gradient
                 if (gradientPos>gradientNeg)
-                    w=w+interval;
-                    modelErrorPrev=avgErrorPos;
+                    w=w+intervalInit;
+                    modelErrorPrev=modelErrorPos;
                     gradient=gradientPos;
                 else
-                    w=w-interval;
-                    modelErrorPrev=avgErrorNeg;
+                    w=w-intervalInit;
+                    modelErrorPrev=modelErrorNeg;
                     gradient=gradientNeg;
                 end
             end
+            
+            % set the w for this model
+            modelWs(i)=w;
         end
+        % set w to the mean of the modelWs
+        w=mean(modelWs);
     end
 end

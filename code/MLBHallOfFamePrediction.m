@@ -86,7 +86,7 @@ function [modelErrors] = MLBHallOfFamePrediction(data,numFolds,statArray,w)
         [HoF, nonHoF] = divideset(trainingSet);
         gaussianHoF = creategaussian(HoF,statArray);          
         gaussianNonHoF = creategaussian(nonHoF,statArray);      
-        
+        errorSkew = 0;
         % classify as HoF or not
         numMisclassifications=0;
         numBaselineMisclassifications=0;
@@ -107,19 +107,26 @@ function [modelErrors] = MLBHallOfFamePrediction(data,numFolds,statArray,w)
                 numBaselineMisclassifications=numBaselineMisclassifications+1;
             end
             
-             if(actualClassification==1 && classification==1)
-                 disp('CORRECTLY GOT A HOFer');
-             end
-             if(actualClassification==0 && classification==0)
-                 disp('CORRECTLY GOT A SCRUB');
-             end
-             if(actualClassification==1 && classification==0)
-                 disp('ACCIDENTALLY CALLED A HALL OF FAMER A SCRUB*********');
-             end
-             if(actualClassification==0 && classification==1)
-                 disp('ACCIDENTALLY CALLED A SCRUB A HALL OF FAMER*********');
-             end
+
+            
+%             if(actualClassification==1 && classification==1)
+%                 disp('CORRECTLY GOT A HOFer');
+%             end
+%             if(actualClassification==0 && classification==0)
+%                 disp('CORRECTLY GOT A SCRUB');
+%             end
+            if(actualClassification==1 && classification==0)
+%                 disp('ACCIDENTALLY CALLED A HALL OF FAMER A SCRUB*********');
+                errorSkew = errorSkew+1;
+            end
+            if(actualClassification==0 && classification==1)
+%                 disp('ACCIDENTALLY CALLED A SCRUB A HALL OF FAMER*********');
+                errorSkew = errorSkew-1;
+            end
+
         end
+        disp('ERROR SKEW:');
+        disp(errorSkew);
         modelError=numMisclassifications/validationSetSize;
         baselineError=numBaselineMisclassifications/validationSetSize;
         modelErrors(i)=modelError;
