@@ -57,7 +57,7 @@ function [w] = findOptW2(data,numFolds,statArray,wInit,intervalInit,threshold)
         gaussianNonHoF = creategaussian(nonHoF,statArray);
         
         % perform gradient descent
-        for w=0:intervalInit:.0001
+        for w=0:intervalInit:.0002
             % get the errors of the models by moving in each direction
             numMisclassifications=0;
             
