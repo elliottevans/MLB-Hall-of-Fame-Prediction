@@ -88,7 +88,7 @@
       <div class="row" style="padding-bottom:30px;" id="dataset">
         <div class="span12">
           <h2>Data Set</h2>
-          <p>We obtained our data set from <a href="http://www.fangraphs.com">Fangraphs</a>, a website that keeps advanced baseball statistics. <strong>Our data set contains career statistics of every player that played any part of his major league career between the years 1974 and 1985, inclusive.</strong> The data we used contains 15 statistics in particular: G, PA, HR, R, RBI, SB, ISO, BABIP, AVG, OBP, SLG, wOBA, wRC+, BsR, and WAR (definitions for all of which can be found at the <a href="http://www.fangraphs.com/library/">Fangraphs Library Stat Glossary</a>). In total, this data set contains data for 483 players, 29 of whom are in the Hall of Fame.</p>
+          <p>We obtained our data set from <a href="http://www.fangraphs.com">Fangraphs</a>, a website that keeps advanced baseball statistics. <strong>Our data set contains career statistics of every player that played any part of his major league career between the years 1974 and 1984, inclusive.</strong> The data we used contains 15 statistics in particular: G, PA, HR, R, RBI, SB, ISO, BABIP, AVG, OBP, SLG, wOBA, wRC+, BsR, and WAR (definitions for all of which can be found at the <a href="http://www.fangraphs.com/library/">Fangraphs Library Stat Glossary</a>). In total, this data set contains data for 483 players, 29 of whom are in the Hall of Fame.</p>
 
           <p>The reason for the selection of these particular years (1974-1984) is a pragmatic one. A player with a long career that ended in 1974 began his career in the late 1950s or later. If we included earlier players, their statistics, very different because of how far removed from the present it is, would change the model in a negative way. A player whose career began in 1984, would have a career that ended by the early 2000s and is therefore 10 years removed from playing, and therefore eligble for the Hall of Fame, per the Baseball Writers' Association of America's <a href="https://sites.google.com/site/brettbushthesis/chapter-2/major-league-baseball-hall-of-fame-entrance-qualifications">Hall of Fame elibility rules.</a></p>
 
@@ -136,8 +136,11 @@
             <img src="individual_error_rates.jpg">
           </center>
         </div>
-        <div class="span8">
+        <div class="span7">
           <p><strong>Better performance can be achieved through the use of multiple statistics.</strong> The question then becomes which combinations of statistics yields the best results. The best possible combination would be statistics that perform well on their own and are relatively uncorrelated - that is, they tell us different things about a player's ability and therfore probability of being inducted into the Hall of Fame. The above graph shows isolated performance of the individual statistics. The graph below shows us the correlation of the various statistics.
+        </div>
+        <div class="span5">
+          <p class="lead">The best possible combination would be statistics that perform well on their own and are relatively uncorrelated - that is, they tell us different things about a player's ability and therfore probability of being inducted into the Hall of Fame.</p>
         </div>
         <div class="span12">
           <center>
@@ -145,12 +148,30 @@
             <img src="correlation_matrix.png">
           </center>
         </div>
-        <div class="span4">
+
+        <div class="span12">
+          <center>
+            <h2>Combining statistics for greater accuracy</h2>
+          </center>
+        </div>
+
+        <div class="span6">
+          <img src="stat_combo_error_rates.png">
+        </div>
+        <div class="span5 offset1">
           <p>Using this information, <strong>we determined that the model with the best possible predictive power would use the statistics WAR and BsR.</strong> This outperforms many other combinations of statistics that we tested together due to their historical importance or because of their favor among baseball statisticians.</p>
+          <p>The triple crown statistics of AVG, HR and RBI perform very poorly, which is somewhat surprising given that the baseball media, who comprise the voters for the Hall of Fame treat these statistics with such importance. WAR alone was the best individual statistic, but is improved further when combined with the baserunning statistic BsR, which also performed well and is not strongly correlated with WAR, and also with wRC+ which, among offensive statistics, was least correlated with WAR.</p>
+          <p><strong>Alas, no combination of statistics was able to outperform the baseline.</strong> </p>
         </div>
-        <div class="span8">
-          <p><strong>ERROR RATES OF STAT COMBOS HERE</strong></p>
+        
+        <div class="span12">
+          <center>
+            <h2>Adding weights</h2>
+          </center>
         </div>
+        <div class="span6">
+          <p class="lead">We found that most of the error in our model was coming from classifying too many scrubs as Hall of Famers, rather than vice-versa.</p>
+          <p>To address this, we decided to create a weight variable, in the hopes that we could make our model a bit more selective as to which players it classified as Hall of Famers.
 
 
 
