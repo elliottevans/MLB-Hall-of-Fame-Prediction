@@ -3,6 +3,10 @@ function gaussian = creategaussian(class_set, stat_array)
 %stat_array is 1xn
 %Don't use 1 or 17 in the stat array...plz.
 
+%If you want the graphs to be displayed, make this 1. 
+%Else make 0.
+wantGraphs = 0;
+
 strings = cell(17, 1);
 strings{1,1} = 'Player ID';
 strings{2,1} = 'G';
@@ -46,6 +50,7 @@ end
    
 gaussian = gmdistribution(mu, sigma);
 
+if(wantGraphs == 1)
 if numOfStats == 2
     figure;
     ezsurf(@(x,y)pdf(gaussian, [x y]), [mu(1,1)-3*sig(1,1) mu(1,1) + 3*sig(1,1)], [mu(1,2)-3*sig(1,2) mu(1,2) + 3*sig(1,2)]);
@@ -60,6 +65,6 @@ if numOfStats == 2
         title('Scrub Gaussian Model');
     end    
 end
-
+end
 end
     
