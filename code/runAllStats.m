@@ -1,4 +1,4 @@
-function errors = runAllStats(data, numFolds, wInit, interval, threshold)
+function errors = runAllStats(data, numFolds)
 %This calls MLBHallOfFamePrediction with each individual stat,
 %outputting a matrix containing the error rates for each stat.
 %Calculates error rate by running it 4 times on each stat,
@@ -12,11 +12,9 @@ errors = zeros(17,1);
 coefficients = zeros(17,1);
 
 for i = 2:16
-    
-    coefficients(i,1) = findOptW2(data, 1, (i), wInit, interval, threshold);  
-    
+   
     for j = 1:run_this_many_times;
-        currentErrors(i,:) = currentErrors(i,:) + MLBHallOfFamePrediction(data, numFolds, (i), coefficients(i,1));
+        currentErrors(i,:) = currentErrors(i,:) + MLBHallOfFamePrediction(data, numFolds, (i));
     end
     
     errors(i,1) = sum(currentErrors(i,:));   
